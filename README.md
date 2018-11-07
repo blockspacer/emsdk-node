@@ -69,8 +69,10 @@ export PATH="/home/sources/emsdk/emscripten/1.38.16:$PATH"
 Note: Your system may provide Node.js as node instead of nodejs. In that case, you may need to also update the NODE_JS attribute of your ~/.emscripten file.
 
 ## Run
+```console
 npm run hello-cpp-func-wasm:build
 npm rum hello-cpp-func-wasm:run
+```
 
 
 ## Usage
