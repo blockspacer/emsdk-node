@@ -48,18 +48,23 @@ git pull
 source ./emsdk_env.sh
 
 # Check versions
+```console
 em++ -v
 emcc -v
 ```
 
 # Check nodejs & npm versions
+```console
 node --version
 npm --version
+```
 
 # Check cmake version
+```console
 cmake --version | head -n1
 
 export PATH="/home/sources/emsdk/emscripten/1.38.16:$PATH"
+```
 
 Note: Your system may provide Node.js as node instead of nodejs. In that case, you may need to also update the NODE_JS attribute of your ~/.emscripten file.
 
