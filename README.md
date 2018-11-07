@@ -1,5 +1,73 @@
 # emscripten example
 
+# emsdk-node
+
+## Setup
+
+Install emscripten https://kripken.github.io/emscripten-site/docs/getting_started/downloads.html
+
+```console
+# Install Python
+sudo apt-get install python2.7 -y
+
+# Install node.js
+sudo apt-get install nodejs -y
+
+# Install CMake (optional, only needed for tests and building Binaryen)
+# CMake 3.8.2 or higher
+```bash
+cd $HOME
+wget https://cmake.org/files/v3.12/cmake-3.12.0-Linux-x86_64.sh
+sudo sh cmake-3.12.0-Linux-x86_64.sh --prefix=/usr/bin --exclude-subdir
+source /etc/environment
+cmake --version | head -n1
+```
+
+# Install Java (optional, only needed for Closure Compiler minification)
+sudo apt-get install default-jre -y
+
+# Install git
+sudo apt-get install git-core
+
+# Get the emsdk repo
+git clone https://github.com/juj/emsdk.git
+
+# Enter that directory
+cd emsdk
+
+# Fetch the latest version of the emsdk (not needed the first time you clone)
+git pull
+
+# Download and install the latest SDK tools.
+./emsdk install latest
+
+# Make the "latest" SDK "active" for the current user. (writes ~/.emscripten file)
+./emsdk activate latest
+
+# Activate PATH and other environment variables in the current terminal
+source ./emsdk_env.sh
+
+# Check versions
+em++ -v
+emcc -v
+```
+
+# Check nodejs & npm versions
+node --version
+npm --version
+
+# Check cmake version
+cmake --version | head -n1
+
+export PATH="/home/sources/emsdk/emscripten/1.38.16:$PATH"
+
+Note: Your system may provide Node.js as node instead of nodejs. In that case, you may need to also update the NODE_JS attribute of your ~/.emscripten file.
+
+## Run
+npm run hello-cpp-func-wasm:build
+npm rum hello-cpp-func-wasm:run
+
+
 ## Usage
 
     $ npm run
