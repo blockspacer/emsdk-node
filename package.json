@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "emscripten-example",
+  "version": "1.0.0",
+  "description": "emscripten example",
+  "main": "index.js",
+  "scripts": {
+    "hello:build": "emcc src/hello.c -o out/hello.js",
+    "hello:run": "node out/hello.js",
+    "hello-func:build": "emcc src/hello-func.c -o out/hello-func.js -s WASM=0",
+    "hello-func:run": "node call-hello.js",
+    "hello-cpp-func:build": "emcc --bind src/hello-func.cpp -o out/hello-func-cpp.js -s WASM=0",
+    "hello-cpp-func:run": "node call-hello-cpp.js",
+    "hello-cpp-func-wasm:build": "emcc --bind -O3 --std=c++17 src/hello-func-wasm.cpp -o out/hello-func-cpp-wasm.js -s WASM=1",
+    "hello-cpp-func-wasm:run": "node call-hello-cpp-wasm.js",
+    "hello-wasm-module:build": "emcc src/hello-func.c -o out/hello-module.js -s WASM=1 -Wall -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=\"['_hello']\"",
+    "hello-wasm-module:run": "node call-module.js",
+    "hello-wasm-direct:build": "emcc ./src/count-only-my-code.c -o ./out/count-only-my-code.wasm -Wall -s WASM=1 -s SIDE_MODULE=1 -s ONLY_MY_CODE=1 -s EXPORTED_FUNCTIONS=\"['_add']\"",
+    "hello-wasm-direct:run": "node call-wasm.js"
+  },
+  "keywords": [],
+  "author": "azu",
+  "license": "MIT"
+}
