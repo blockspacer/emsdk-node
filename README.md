@@ -1,5 +1,8 @@
 # emscripten example
 
+TODO:
+https://3dgen.cn/cppwasm-book/ch4-techniques/ch4-04-obj-life-cycle.html
+
 # emsdk-node
 
 ## Setup
@@ -68,12 +71,31 @@ export PATH="/home/sources/emsdk/emscripten/1.38.16:$PATH"
 
 Note: Your system may provide Node.js as node instead of nodejs. In that case, you may need to also update the NODE_JS attribute of your ~/.emscripten file.
 
-## Run
+## Run on nodejs
 ```console
 npm run hello-cpp-func-wasm:build
 npm rum hello-cpp-func-wasm:run
 ```
 
+## Run in browser
+
+Read https://medium.com/coinmonks/develop-w3c-web-components-with-webassembly-d65938284255
+
+```console
+sh runhtml.sh
+open http://localhost:8080/webcomponets.html
+```
+
+TODO Use polyfills for web components^
+* https://github.com/webcomponents/webcomponentsjs
+* https://medium.com/@andrejsabrickis/make-polymer-2-0-web-components-work-on-ie11-and-edge-8d82eb1b9e5e
+* https://dev.to/bennypowers/lets-build-web-components-part-2-the-polyfills-dkh
+
+## Run in Vue.js
+see my-project folder
+
+## Note
+embind isn't currently maintained (see kripken/emscripten#6362 (comment)), https://github.com/iodide-project/pyodide/issues/42
 
 ## Usage
 

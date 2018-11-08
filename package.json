@@ -11,12 +11,17 @@
     "hello-func:run": "node call-hello.js",
     "hello-cpp-func:build": "emcc --bind src/hello-func.cpp -o out/hello-func-cpp.js -s WASM=0",
     "hello-cpp-func:run": "node call-hello-cpp.js",
-    "hello-cpp-func-wasm:build": "emcc --bind -O3 --std=c++17 src/hello-func-wasm.cpp -o out/hello-func-cpp-wasm.js -s WASM=1",
+    "hello-cpp-func-wasm:build": "emcc --bind -O3 -s EXPORT_ES6=1 --std=c++17 src/hello-func-wasm.cpp -o out/hello-func-cpp-wasm.js -s WASM=1 -s EXPORT_NAME=\"'Module'\"",
     "hello-cpp-func-wasm:run": "node call-hello-cpp-wasm.js",
+    "hello-cpp-func-wasm:browserify": "browserify out/hello-func-cpp-wasm.js > out/bundle-hello-func-cpp-wasm.js",
     "hello-wasm-module:build": "emcc src/hello-func.c -o out/hello-module.js -s WASM=1 -Wall -s MODULARIZE=1 -s EXPORTED_FUNCTIONS=\"['_hello']\"",
     "hello-wasm-module:run": "node call-module.js",
     "hello-wasm-direct:build": "emcc ./src/count-only-my-code.c -o ./out/count-only-my-code.wasm -Wall -s WASM=1 -s SIDE_MODULE=1 -s ONLY_MY_CODE=1 -s EXPORTED_FUNCTIONS=\"['_add']\"",
     "hello-wasm-direct:run": "node call-wasm.js"
+  },
+  "devDependencies": {
+    "browserify": "^16.2.2",
+    "budo": "^11.2.2"
   },
   "keywords": [],
   "author": "azu",

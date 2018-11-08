@@ -1,18 +1,21 @@
-const path = require("path");
-// to resolve wasm file
-process.chdir(path.join(__dirname, "out"));
-const Module = require("./out/hello-func-cpp-wasm");
-Module.onRuntimeInitialized = _ => {
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>WebAssembly Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
 
-    let valTemplated = new Module.Templated();
-    valTemplated.set(1);
-    console.log("valTemplated", valTemplated.get());
-    valTemplated.set("verylongstringmaybehere!verylongstringmaybehere!verylongstringmaybehere!verylongstringmaybehere!verylongstringmaybehere!");
-    console.log("valTemplated", valTemplated.get());
-           // prints 123456789123456780 !!!
-    valTemplated.set(123456789123456789);
-    console.log("valTemplated", valTemplated.get());
+    <div class="dice dice-6"></div>
+    <span>Example</span>    
 
+    <!-- Include the JavaScript glue code. -->
+    <!-- This will load the WebAssembly module and run its main. --> 
+    <script src="out/hello-func-cpp-wasm.js"></script>
+    <script>
+ 
+Module['onRuntimeInitialized'] = function() {
     // test etd::optional, if(n == 0) => return std::nullopt;
     // see https://qiita.com/yumetodo/items/32eb162faa78f36009a6
     const op = Module.OptionalTest.foo(2);
@@ -95,3 +98,7 @@ Module.onRuntimeInitialized = _ => {
     vec.delete();
     vectorHolder.delete();
 };
+    </script>
+   
+  </body>
+</html> 
