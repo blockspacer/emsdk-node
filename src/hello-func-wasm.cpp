@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <optional>
 #include <cstdlib>
+#include <algorithm>
+#include <functional>
+#include <iterator>
+#include <vector>
 
 #include <emscripten.h>
 #include <emscripten/bind.h>
@@ -13,14 +17,14 @@ using namespace emscripten;
 // see https://developers.google.com/web/updates/2018/08/embind
 
 extern "C" {
-  EMSCRIPTEN_KEEPALIVE
-  extern int daysInWeek();
+    EMSCRIPTEN_KEEPALIVE
+    extern int daysInWeek();
 
-  EMSCRIPTEN_KEEPALIVE
-  extern int hoursInDay();
+    EMSCRIPTEN_KEEPALIVE
+    extern int hoursInDay();
 
-  EMSCRIPTEN_KEEPALIVE
-  int getBuffer();
+    EMSCRIPTEN_KEEPALIVE
+    int getBuffer();
 }
 
 static int buffer;
@@ -133,6 +137,32 @@ void call_callback(int num, emscripten::val callback) {
   std::cout << num << std::endl;
   callback();
 }
+
+// see https://github.com/kripken/emscripten/blob/b6b2c0ff37ed761a3ea8ad0371bf985f5004cfde/system/include/emscripten/val.h
+std::vector<emscripten::val> vecFromJSArray(val v) {
+    auto l = v["length"].as<unsigned>();
+    //Object.keys()
+
+    std::vector<emscripten::val> rv;
+    for(unsigned i = 0; i < l; ++i) {
+        rv.push_back(v[i]);
+    }
+
+    return rv;
+};
+
+static void each_arr(emscripten::val arr, emscripten::val callback) {
+    for (emscripten::val& i: vecFromJSArray(arr)) callback(arr, i);
+}
+
+static void each_vec(emscripten::val arr, emscripten::val callback) {
+    for (emscripten::val& i: vecFromJSArray(arr)) callback(i);
+}
+
+/*void call_callback(int num, emscripten::val callback) {
+  std::cout << num << std::endl;
+  callback();
+}*/
 
 class StringHolder {
 public:
@@ -452,6 +482,7 @@ class_<TemplatedConstructor<int>>("TemplatedConstructor")
   constant("SOME_CONSTANT", SOME_CONSTANT);
   // functions
   function("call_callback", &call_callback);
+  function("each_arr", &each_arr);
   function("add", &add);
   function("exclaim", &exclaim);
   function("makeBuffer", &makeBuffer);

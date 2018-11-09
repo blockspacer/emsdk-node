@@ -6,7 +6,14 @@ const Module = require("./out/hello-func-cpp-wasm");
 // see https://searchcode.com/codesearch/view/57974704/
 
 Module.onRuntimeInitialized = _ => {
-    let valTemplatedConstructor = new Module.TemplatedConstructor("str");
+    var a = ["a", "b", "c"];
+    var f = function(obj, i) {
+        console.log("function cal for ", i, " out of ", obj);
+    }
+    Module.each_arr(a, f);
+    Module.each_arr(Object.entries({ 'a': 1, 'b': 2, 'c': { 'k': 6, 'l': 9 } }), f);
+
+    let valTemplatedConstructor = new Module.TemplatedConstructor(f);
     console.log("valTemplatedConstructor", valTemplatedConstructor.get());
     valTemplatedConstructor.set(1);
     console.log("valTemplatedConstructor", valTemplatedConstructor.get());
