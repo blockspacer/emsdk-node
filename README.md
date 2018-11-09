@@ -91,8 +91,25 @@ TODO Use polyfills for web components^
 * https://medium.com/@andrejsabrickis/make-polymer-2-0-web-components-work-on-ie11-and-edge-8d82eb1b9e5e
 * https://dev.to/bennypowers/lets-build-web-components-part-2-the-polyfills-dkh
 
-## Run in Vue.js
+## Run in Vue.js (based on http://vuejs-templates.github.io/webpack/ template)
 see my-project folder
+
+```console
+npm run copy-to-vue-project
+cd my-project
+npm run dev
+```
+
+## About fallback to asm.js
+see my-project/src/main.js
+
+```console
+npm run hello-cpp-func-wasm:build
+npm run hello-cpp-func-wasm:asmjs
+npm run copy-to-vue-project
+cd my-project
+npm run dev
+```
 
 ## Note
 embind isn't currently maintained (see kripken/emscripten#6362 (comment)), https://github.com/iodide-project/pyodide/issues/42
