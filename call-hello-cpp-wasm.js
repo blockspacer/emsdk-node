@@ -6,7 +6,7 @@ const Module = require("./out/hello-func-cpp-wasm");
 // see https://searchcode.com/codesearch/view/57974704/
 
 Module.onRuntimeInitialized = _ => {
-    let valTemplatedConstructor = new Module.TemplatedConstructor("1", "2", {isStr: true, value: "customStr"});
+    let valTemplatedConstructor = new Module.TemplatedConstructor("str");
     console.log("valTemplatedConstructor", valTemplatedConstructor.get());
     valTemplatedConstructor.set(1);
     console.log("valTemplatedConstructor", valTemplatedConstructor.get());

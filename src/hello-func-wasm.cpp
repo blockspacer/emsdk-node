@@ -350,10 +350,14 @@ private:
     //TemplatedConstructor<U> link(Fn fn, Args&&... args);
 
 public:
-    TemplatedConstructor() {};
-    TemplatedConstructor(T val) : value(val) {};
+    TemplatedConstructor() {
+        std::cout << "TemplatedConstructor() called" << std::endl;
+    };
+    TemplatedConstructor(T val) : value(val) {
+        std::cout << "TemplatedConstructor(T val) called" << std::endl;
+    };
     TemplatedConstructor(std::string val) : str(val) {
-        //std::cout << "TemplatedConstructor(std::string val) called" << std::endl;
+        std::cout << "TemplatedConstructor(std::string val) called" << std::endl;
     };
     TemplatedConstructor(int a1, int a2) { p1 = a1; p2 = a2; };
 
@@ -390,7 +394,17 @@ class_<Templated>("Templated")
     .function("get", &Templated::get);
 class_<TemplatedConstructor<int>>("TemplatedConstructor")
     .constructor<>()
-    .constructor<int>()
+    //.constructor<int>()
+    .constructor<emscripten::val>( select_overload<TemplatedConstructor<int>(emscripten::val)>([](emscripten::val c) {
+       std::cout << "int constructor wrapped with emscripten::val" << std::endl;
+       std::cout << "c.typeof().as<std::string>() is " << c.typeof().as<std::string>() << std::endl;
+       if (c.typeof().as<std::string>() == "string") {
+           return TemplatedConstructor<int>("1");
+       } else if (c.typeof().as<std::string>() == "boolean") {
+           return TemplatedConstructor<int>(true);
+       }
+       return TemplatedConstructor<int>(1);
+    }))
     //.constructor<std::string>()
     //.constructor<std::string>(select_overload<void(std::string)>(&TemplatedConstructor<std::string>::TemplatedConstructor<std::string>))
     .constructor<int, int>()
@@ -401,7 +415,7 @@ class_<TemplatedConstructor<int>>("TemplatedConstructor")
        return TemplatedConstructor<int>("wrapped constructor");
     }))*/
 
-    // Idea: use emscripten::val && hasOwnProperty to create overloaded constructors. We can call native constructor based on properties
+    // Idea: use emscripten::val && hasOwnProperty to create overloaded constructors. We can call native constructor based on Properties
     .constructor<std::string>( select_overload<TemplatedConstructor<int>(std::string, std::string, emscripten::val)>([](std::string a, std::string b, emscripten::val c) {
        std::cout << "wrap constructor in lambda 1" << std::endl;
        std::cout << "c.typeof().as<std::string>() is " << c.typeof().as<std::string>() << std::endl;
