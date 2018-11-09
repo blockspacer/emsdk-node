@@ -113,6 +113,12 @@ npm run dev
 
 ## Cmake & emscripten
 
+```console
+mkdir build-emscripten
+cd build-emscripten
+emcmake cmake ..
+emmake make
+```
 
 ## Note
 embind isn't currently maintained (see kripken/emscripten#6362 (comment)), https://github.com/iodide-project/pyodide/issues/42
