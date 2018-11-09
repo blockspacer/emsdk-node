@@ -14,7 +14,7 @@ function initVue() {
 }
 
 const script = document.createElement('script');
-script.src = (typeof WebAssembly === 'undefined') ? '/dist/hello-func-cpp-wasm-asmjs.js' : '/dist/hello-func-cpp-wasm.js';   // set script source
+script.src = (typeof WebAssembly === 'undefined') ? '/dist/hello-func-cpp-asmjs.js' : '/dist/hello-func-cpp-wasm.js';   // set script source
 script.onload = () => {    // once script has loaded
   console.log("Loaded Emscripten.");
   if (typeof WebAssembly === 'undefined') {
