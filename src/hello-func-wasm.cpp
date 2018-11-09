@@ -338,6 +338,46 @@ emscripten::val Templated::get() {
     return value;
 }
 
+template<typename T> 
+class TemplatedConstructor {
+private:
+    T value;
+    int p1;
+    int p2;
+    std::string str;
+
+    //template<typename U, typename Fn, class... Args>
+    //TemplatedConstructor<U> link(Fn fn, Args&&... args);
+
+public:
+    TemplatedConstructor() {};
+    TemplatedConstructor(T val) : value(val) {};
+    TemplatedConstructor(std::string val) : str(val) {
+        //std::cout << "TemplatedConstructor(std::string val) called" << std::endl;
+    };
+    TemplatedConstructor(int a1, int a2) { p1 = a1; p2 = a2; };
+
+    void set(T val) {
+        value = val;
+        str = std::to_string(value);
+    }
+
+    T get() {
+        std::cout << "str:" << str << std::endl;
+        std::cout << "p1:" << p1 << std::endl;
+        std::cout << "p2:" << p2 << std::endl;
+        return value;
+    }
+};
+
+//TemplatedConstructor<int>* makeMyClass(int, int); //Factory function.
+
+/*template<typename T>
+TemplatedConstructor<T>::TemplatedConstructor(T value)() {
+    value = value;
+}*/
+
+
 // see https://github.com/charto/nbind
 
 //using emscripten::val;
@@ -348,6 +388,42 @@ class_<Templated>("Templated")
     .constructor<>()
     .function("set", &Templated::set)
     .function("get", &Templated::get);
+class_<TemplatedConstructor<int>>("TemplatedConstructor")
+    .constructor<>()
+    .constructor<int>()
+    //.constructor<std::string>()
+    //.constructor<std::string>(select_overload<void(std::string)>(&TemplatedConstructor<std::string>::TemplatedConstructor<std::string>))
+    .constructor<int, int>()
+    //.constructor(&makeMyClass, allow_raw_pointers())
+    //.constructor<int, int>("TemplatedConstructor_2")
+    /*.constructor<std::string>( select_overload<TemplatedConstructor<int>(std::string, std::string, std::string)>([](std::string a, std::string b, std::string c) {
+       std::cout << "wrap constructor in lambda 1" << std::endl;
+       return TemplatedConstructor<int>("wrapped constructor");
+    }))*/
+
+    // Idea: use emscripten::val && hasOwnProperty to create overloaded constructors. We can call native constructor based on properties
+    .constructor<std::string>( select_overload<TemplatedConstructor<int>(std::string, std::string, emscripten::val)>([](std::string a, std::string b, emscripten::val c) {
+       std::cout << "wrap constructor in lambda 1" << std::endl;
+       std::cout << "c.typeof().as<std::string>() is " << c.typeof().as<std::string>() << std::endl;
+       if (c.hasOwnProperty("isStr")){
+           std::cout << "hasOwnProperty isStr" << std::endl;
+           std::cout << "c[\"isStr\"].typeof().as<std::string>() is " << c["isStr"].typeof().as<std::string>() << std::endl;
+           std::cout << "c[\"value\"].typeof().as<std::string>() is " << c["value"].typeof().as<std::string>() << std::endl;
+           //emscripten::val strVal = c["isStr"];
+           //std::string getVal;
+           std::cout << "strVal: " << c["value"].as<std::string>() << std::endl;
+           
+           return TemplatedConstructor<int>(c["value"].as<std::string>());
+       }
+       if (c.hasOwnProperty("isNumber")){
+           std::cout << "hasOwnProperty isNumber" << std::endl;
+           return TemplatedConstructor<int>("wrapped constructor");
+       }
+       return TemplatedConstructor<int>("wrapped constructor");
+    }))
+    //.constructor<int>("TemplatedConstructor_int")
+    .function("set", &TemplatedConstructor<int>::set)
+    .function("get", &TemplatedConstructor<int>::get);
     //
   emscripten::class_<OptionalTest>("OptionalTest")
     .constructor<>()

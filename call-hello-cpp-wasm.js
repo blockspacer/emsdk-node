@@ -2,12 +2,21 @@ const path = require("path");
 // to resolve wasm file
 process.chdir(path.join(__dirname, "out"));
 const Module = require("./out/hello-func-cpp-wasm");
-Module.onRuntimeInitialized = _ => {
 
+// see https://searchcode.com/codesearch/view/57974704/
+
+Module.onRuntimeInitialized = _ => {
+    let valTemplatedConstructor = new Module.TemplatedConstructor("1", "2", {isStr: true, value: "customStr"});
+    console.log("valTemplatedConstructor", valTemplatedConstructor.get());
+    valTemplatedConstructor.set(1);
+    console.log("valTemplatedConstructor", valTemplatedConstructor.get());
+    valTemplatedConstructor.set(4356236);
+    console.log("valTemplatedConstructor", valTemplatedConstructor.get());
+    
     let valTemplated = new Module.Templated();
     valTemplated.set(1);
     console.log("valTemplated", valTemplated.get());
-    valTemplated.set("verylongstringmaybehere!verylongstringmaybehere!verylongstringmaybehere!verylongstringmaybehere!verylongstringmaybehere!");
+    valTemplated.set("verylongstringmaybehere!verylongstringmaybehere!verylongstringmaybehere!verylongstringmaybehere!");
     console.log("valTemplated", valTemplated.get());
            // prints 123456789123456780 !!!
     valTemplated.set(123456789123456789);

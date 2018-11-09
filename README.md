@@ -123,6 +123,10 @@ emmake make
 ## Note
 embind isn't currently maintained (see kripken/emscripten#6362 (comment)), https://github.com/iodide-project/pyodide/issues/42
 
+The emscripten team were toying with the idea of deprecating embind in favor of using nbind:
+kripken/emscripten#4770
+However, due to large feature gap, they decided to not do it.
+
 ## Usage
 
     $ npm run
